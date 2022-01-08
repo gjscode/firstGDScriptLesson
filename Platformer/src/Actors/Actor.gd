@@ -18,8 +18,8 @@ export var speed: = Vector2(300.0, 1000.0)
 export var gravity: = 3000.0
 
 #Vector2() reprents 2d space (x, y)
-var velocity: = Vector2.ZERO
+var _velocity: = Vector2.ZERO
 
 
-	#using the speed var above, this always return the minimum of the two values, capping how high velocity.y can go
-	##velocity.y = min(speed.y, velocity.y)
+	#using the speed var above, this always return the minimum of the two values, capping how high _velocity.y can go
+	##_velocity.y = min(speed.y, _velocity.y)

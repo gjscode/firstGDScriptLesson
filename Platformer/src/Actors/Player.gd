@@ -4,13 +4,16 @@ extends Actor
 #physics_process is a function which godot will call every frame of your game (30-60fps)
 #used for things that require physics (collisions, movement etc)
 func _physics_process(delta: float) -> void:
-	#this "scopes" the variable
+	#placing var before "scopes" the variable
+	#will check to see if the input for jump has been interrupted, and if they are jumping
+	#must be added to calculate_move_velocity()
+	var is_jump_interrupted: = Input.is_action_just_released("jump") and _velocity.y < 0.0
 	var direction: = get_direction()
-	velocity = calculate_move_velocity(velocity, direction, speed)
+	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
 	#this will move the player based on the inputed value (which we created in the Actor script)
-	#has delta value built in so no need to * velocity by delta
-	#having (velocity =) at the start will reset velocity to zero when they collide with something
-	velocity = move_and_slide(velocity, FLOOR_NORMAL)
+	#has delta value built in so no need to * _velocity by delta
+	#having (_velocity =) at the start will reset _velocity to zero when they collide with something
+	_velocity = move_and_slide(_velocity, FLOOR_NORMAL)
 
 func get_direction() -> Vector2:
 	return Vector2(
@@ -27,14 +30,15 @@ func get_direction() -> Vector2:
 
 
 func calculate_move_velocity(
-		#velocity is called linear_velocity in the documentation so we use that
+		#_velocity is called linear_velocity in the documentation so we use that
 		#we are passing each parameter so they can be used within the "scope" of this function
 		#otherwise it would have to be initialized above any function to be "globally" accessible, but that is messy
 		linear_velocity: Vector2,
 		direction: Vector2,
-		speed: Vector2
+		speed: Vector2,
+		is_jump_interrupted: bool
 	) -> Vector2:
-	#new_velocity will start from linear_velocity, it will take the initial velocity
+	#new_velocity will start from linear_velocity, it will take the initial _velocity
 	#it will make some calculations with the other parameters (direction and speed) and return a new value
 	#this new value can then be assigned or stored or processed however we want
 	var new_velocity: = linear_velocity
@@ -46,8 +50,11 @@ func calculate_move_velocity(
 	#get_physics_process_delta_time() returns the delta value we have above in _physics_process
 	new_velocity.y += gravity * get_physics_process_delta_time()
 	#from above, when "jump" is pressed, direction.y becomes -1.0
-	#when that happens, this will override the characters velocity.y
-	#the player's y speed will be applied to velocity
+	#when that happens, this will override the characters _velocity.y
+	#the player's y speed will be applied to _velocity
 	if direction.y == -1.0:
 		new_velocity.y = speed.y * direction.y
+	#will make it so if you stop pressing jump, the jump will end
+	if is_jump_interrupted:
+		new_velocity.y = 0.0
 	return new_velocity
