@@ -28,7 +28,6 @@ func get_direction() -> Vector2:
 		-1.0 if Input.get_action_strength("jump") and is_on_floor() else 1.0
 	)
 
-
 func calculate_move_velocity(
 		#_velocity is called linear_velocity in the documentation so we use that
 		#we are passing each parameter so they can be used within the "scope" of this function
