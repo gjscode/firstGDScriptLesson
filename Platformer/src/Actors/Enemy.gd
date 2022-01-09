@@ -2,6 +2,9 @@ extends "res://src/Actors/Actor.gd"
 
 #called on every node in the game, from top to bottom in the scene tree, from the bottom to the top in a node
 func _ready() -> void:
+	#deactivates the enemy at the start of the game
+	#will activate when the enemy is in the view because of VisibilityEnabler2D on the enemy node
+	set_physics_process(false)
 	#since this is a "mario" type game that will progress to the right, we will set the enemy to move left at the start
 	_velocity.x = -speed.x
 
