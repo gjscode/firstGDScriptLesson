@@ -8,6 +8,17 @@ func _ready() -> void:
 	#since this is a "mario" type game that will progress to the right, we will set the enemy to move left at the start
 	_velocity.x = -speed.x
 
+func _on_StompDetector_body_entered(body: Node) -> void:
+	#this compare the position of the StompDetector with the position of the Player that will enter the area
+	if body.global_position.y > get_node("StompDetector").global_position.y:
+		#return to void, it returns nothing but it will stop the function here
+		return
+	#this makes it so that the CollisionShape2D of the Enemy is disabled once you jump on it
+	#get_node("CollisionShape2D").disabled = true
+	#this will essentially delete the enemy
+	queue_free()
+
+
 func _physics_process(delta: float) -> void:
 	_velocity.y += gravity * delta
 	#is_on_wall, is_on_floor only update after the node has moved
@@ -17,3 +28,5 @@ func _physics_process(delta: float) -> void:
 	#having "_velocity =" at the start will reset _velocity to zero when they collide with something
 	#in this case, we do not want that for the enemy and so we only have it reset y
 	_velocity.y = move_and_slide(_velocity, FLOOR_NORMAL).y
+
+
