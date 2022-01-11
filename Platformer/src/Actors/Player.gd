@@ -1,5 +1,12 @@
 extends Actor
 
+export var stomp_impulse: = 1000.0
+
+#when a player jumps on the enemy their velocity will change
+#stomp_impulse will determine how high they "bump" into the air after stomping on enemies
+func _on_EnemyDetector_area_entered(area: Area2D) -> void:
+	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
+
 #will run the parent's (Actor) physics process first and then this one
 #physics_process is a function which godot will call every frame of your game (30-60fps)
 #used for things that require physics (collisions, movement etc)
@@ -57,3 +64,10 @@ func calculate_move_velocity(
 	if is_jump_interrupted:
 		new_velocity.y = 0.0
 	return new_velocity
+
+func calculate_stomp_velocity(linear_velocity: Vector2, impulse: float) -> Vector2:
+	#sets "out" to be equal to linear_velocity
+	var out: = linear_velocity
+	#replaces the y component of our linear_velocity to negative impulse
+	out.y = -impulse
+	return out

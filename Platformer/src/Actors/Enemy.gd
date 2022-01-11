@@ -14,7 +14,7 @@ func _on_StompDetector_body_entered(body: Node) -> void:
 		#return to void, it returns nothing but it will stop the function here
 		return
 	#this makes it so that the CollisionShape2D of the Enemy is disabled once you jump on it
-	#get_node("CollisionShape2D").disabled = true
+	get_node("CollisionShape2D").disabled = true
 	#this will essentially delete the enemy
 	queue_free()
 
